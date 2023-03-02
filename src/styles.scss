@@ -1,1 +1,19 @@
 /* You can add global styles to this file, and also import other style files */
+@import 'ngx-toastr/toastr';
+
+.global-width {
+  width: 60%;
+
+  @media (max-width: 768px) {
+    width: 90%;
+  }
+}
+
+.background-radiant {
+  background: linear-gradient(#2C395C, #230F2B, black) fixed;
+  min-height: 100vh;
+}
+
+.align-items-center {
+  align-items: center;
+}

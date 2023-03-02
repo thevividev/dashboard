@@ -1,0 +1,33 @@
+.max-width {
+  max-width: 600px;
+}
+
+.btn-color {
+  background: #4e5f9f;
+}
+
+.show-validation {
+  visibility: hidden;
+  animation: fadeOut 1s ease;
+  -webkit-animation: fadeOut 1s ease;
+  -moz-animation: fadeOut 1s ease;
+  -o-animation: fadeOut 1s ease;
+}
+
+.show-validation.visible {
+  visibility: visible;
+  animation: fadeIn 1s ease;
+  -webkit-animation: fadeIn 1s ease;
+  -moz-animation: fadeIn 1s ease;
+  -o-animation: fadeIn 1s ease;
+}
+
+@keyframes fadeIn {
+  from { visibility: hidden; opacity: 0; }
+  to { visibility: visible; opacity: 1; }
+}
+
+@keyframes fadeOut {
+  from { visibility: visible; opacity: 1; }
+  to { visibility: hidden; opacity: 0; }
+}
