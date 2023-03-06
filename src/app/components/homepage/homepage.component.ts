@@ -1,9 +1,12 @@
 import { Component } from '@angular/core';
+import axios from 'axios';
 import { ToastrService } from 'ngx-toastr';
+import {AuthService} from "../../services/auth/auth.service";
+import {environment} from "../../../environments/environment";
+import {NotificationData, NotificationsService} from "../../services/notifications/notifications.service";
 
-interface Data {
-  title?: string;
-  message?: string;
+interface Options {
+  persistentData: boolean;
 }
 
 @Component({
@@ -14,21 +17,34 @@ interface Data {
 export class HomepageComponent {
   showValidation = false;
   initValidation = false;
+  apiUrl: string = environment.apiUrl;
 
-  data: Data = {};
+  formData: NotificationData = {
+    title: '',
+    message: ''
+  };
+  confirmationFormData: NotificationData = {
+    title: '',
+    message: ''
+  };
 
-  confirmationData: Data = {};
+  options: Options = {
+    persistentData: false
+  };
 
-  constructor(private toastr: ToastrService) {}
+  constructor(private toastr: ToastrService,
+              private _servNotifications: NotificationsService
+              ) {}
 
   activateValidation(): void {
-    if (!this.data.message || !this.data.title) {
+    if (!this.formData.message || !this.formData.title) {
+      this.toastr.warning('Il faut remplir tous les champs !');
       return;
     }
 
     this.initValidation = true;
     this.showValidation = true;
-    this.confirmationData = { ...this.data };
+    this.confirmationFormData = { ...this.formData };
   }
 
   deactivateValidation(): void {
@@ -37,12 +53,22 @@ export class HomepageComponent {
   }
 
   resetFields(): void {
-    this.data = { title: '', message: '' };
+    if (this.options.persistentData) {
+      return;
+    }
+
+    this.formData = { title: '', message: '' };
     this.initValidation = false;
   }
 
-  sendNotification() {
-    this.toastr.success('Notification envoyé avec succès !');
-    this.deactivateValidation();
+  async sendNotification() {
+    let sent: boolean = await this._servNotifications.sendNotification(this.formData);
+    if (sent) {
+      this.deactivateValidation();
+    }
+  }
+
+  setOption(key: keyof Options, value: boolean): void {
+    this.options[key] = value;
   }
 }

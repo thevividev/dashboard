@@ -1,17 +1,29 @@
-<div class="d-flex align-items-center w100 pt-5 fx-col background-radiant text-white pb-3">
+
+
+<div class="d-flex align-items-center w100 fx-col text-white pb-3 px-1">
   <h1 class="text-center">Envoie une notification</h1>
 
-  <div class="mb-5 hide-md-down"></div>
+  <div class="d-flex fx-col w100 mb-4 align-items-center px-5">
+    <p class="font-s4 mb-3 font-w700">Options</p>
+    <div class="mx-auto">
+      <div class="no-select cursor-pointer d-flex" (click)="setOption('persistentData', !options.persistentData)">
+        <input class="mr-2 cursor-pointer" type="checkbox" [checked]="options.persistentData" />
+        <span>Garder les données dans le formulaire une fois la notif envoyée.</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider white divider-width hide-md-down"></div>
 
   <div class="d-flex fx-col form-field align-items-center global-width mt-5 mb-4 max-width">
     <div class="w100">
       <label for="title-input">Titre</label>
-      <input [(ngModel)]="data.title" id="title-input" class="form-control rounded-2 white mb-3"/>
+      <input [(ngModel)]="formData.title" id="title-input" class="form-control rounded-2 white mb-3"/>
     </div>
 
     <div class="w100">
       <label for="message-input">Message</label>
-      <input [(ngModel)]="data.message" id="message-input" class="form-control rounded-2 white mb-3"/>
+      <input [(ngModel)]="formData.message" id="message-input" class="form-control rounded-2 white mb-3"/>
     </div>
 
     <button class="btn btn-color rounded-2 mb-3" (click)="activateValidation()">Valider</button>
@@ -21,8 +33,8 @@
     <div [ngClass]="{'visible': showValidation}" class="global-width max-width show-validation d-flex fx-col fx-wrap wb-break-word">
       <h3>Veux-tu vraiment envoyer ce message à toute la 2VI family ?</h3>
 
-      <h4 class="mb-1">{{confirmationData.title}}</h4>
-      <h6 class="mb-4 mt-0">{{confirmationData.message}}</h6>
+      <h4 class="mb-1">{{confirmationFormData.title}}</h4>
+      <h6 class="mb-4 mt-0">{{confirmationFormData.message}}</h6>
 
       <div class="d-flex fx-right">
         <button class="btn red dark-4 rounded-2 mr-3" (click)="deactivateValidation()">Annuler</button>

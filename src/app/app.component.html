@@ -1,1 +1,24 @@
+<div class="text-right mb-2">
+  <div  *ngIf="_servAuth.isAuthenticated()" class="d-flex fx-right mx-3">
+    <p class="font-w700 font-s4 text-white mr-auto">{{ _servAuth.getUsername() }}</p>
+    <div class="" (click)="logout()">
+      <i
+        class="fa fa-sign-out text-white icon-big pt-3 cursor-pointer"
+        aria-hidden="true"
+      ></i>
+    </div>
+  </div>
+
+  <div *ngIf="!_servAuth.isAuthenticated()" class="d-inline-block mx-3">
+    <a routerLink="/login" class="text-white">
+      <p class="font-w700 font-s2">Login</p>
+    </a>
+  </div>
+  <div *ngIf="!_servAuth.isAuthenticated()" class="d-inline-block mx-3">
+    <a routerLink="/register" class="text-white">
+      <p class="font-w700 font-s2">Register</p>
+    </a>
+  </div>
+</div>
+
 <router-outlet></router-outlet>

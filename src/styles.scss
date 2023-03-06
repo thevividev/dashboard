@@ -1,6 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
 @import 'ngx-toastr/toastr';
 
+$maxWidth: 600px;
+
 .global-width {
   width: 60%;
 
@@ -9,11 +11,34 @@
   }
 }
 
-.background-radiant {
+body {
   background: linear-gradient(#2C395C, #230F2B, black) fixed;
   min-height: 100vh;
 }
 
 .align-items-center {
   align-items: center;
+}
+
+.max-width {
+  max-width: $maxWidth;
+}
+
+.divider-width {
+  max-width: $maxWidth + 200px;
+}
+
+.btn-color {
+  background: #4e5f9f;
+}
+
+.no-select {
+  -webkit-user-select: none; /* Safari */
+  -moz-user-select: none; /* Firefox */
+  -ms-user-select: none; /* IE10+/Edge */
+  user-select: none; /* Standard */
+}
+
+.icon-big {
+  font-size: 2rem;
 }
