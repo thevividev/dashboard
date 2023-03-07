@@ -33,8 +33,13 @@ export class HomepageComponent {
   };
 
   constructor(private toastr: ToastrService,
-              private _servNotifications: NotificationsService
+              private _servNotifications: NotificationsService,
+              private _servAuth: AuthService
               ) {}
+
+  ngOnInit(): void {
+    this._servAuth.refreshToken();
+  }
 
   activateValidation(): void {
     if (!this.formData.message || !this.formData.title) {
@@ -62,10 +67,9 @@ export class HomepageComponent {
   }
 
   async sendNotification() {
-    let sent: boolean = await this._servNotifications.sendNotification(this.formData);
-    if (sent) {
-      this.deactivateValidation();
-    }
+    await this._servNotifications.sendNotification(this.formData);
+    this.deactivateValidation();
+
   }
 
   setOption(key: keyof Options, value: boolean): void {

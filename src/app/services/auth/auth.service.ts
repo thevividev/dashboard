@@ -23,27 +23,29 @@ export class AuthService {
 
   async login(username: string, password: string) {
     try {
-      let response = await axios.post(`${environment.apiUrl}/auth/login`, {username, password});
+      const { data } = await axios.post(`${environment.apiUrl}/auth/login`, { username, password });
+      const { token } = data;
 
-      if (response.status === 401) {
-        this.toastr.error('Identifiants incorrects !');
-        return;
-      }
-
-      this.token = response.data.token;
-      localStorage.setItem('token', this.token);
+      this.token = token;
+      localStorage.setItem('token', token);
 
       await this.router.navigateByUrl('/');
+    } catch (error: any) {
+      if (error.response) {
+        const { status } = error.response;
 
-    } catch (e: any) {
-      if (e.response.status === 401) {
-        this.toastr.error('Identifiants incorrects !');
-        return;
+        if (status === 401) {
+          this.toastr.error('Identifiants incorrects !');
+          return;
+        }
+
+        this.toastr.error(`Une erreur est survenue (${status}) !`);
+      } else {
+        this.toastr.error('Mon serveur est down, envoie un mp sur discord !');
       }
-
-      this.toastr.error('Une erreur est survenue !');
     }
   }
+
 
   getToken(): string {
     this._updateToken();
@@ -62,24 +64,53 @@ export class AuthService {
 
   async register(username: string, password: string) {
     try {
-      let response = await axios.post(environment.apiUrl + "auth/register", {username, password});
+      const { data } = await axios.post(`${environment.apiUrl}/auth/register`, { username, password });
+      const { token } = data;
 
-      this.token = response.data.token;
-      localStorage.setItem('token', this.token);
+      this.token = token;
+      localStorage.setItem('token', token);
 
       await this.router.navigateByUrl('/');
-    } catch (e: any) {
-      if (e.response.data.error) {
-        this.toastr.error(e.response.data.error);
-        return;
+    } catch (error: any) {
+      if (error.response && error.response.data && error.response.data.error) {
+        const errorMessage = error.response.data.error;
+        this.toastr.error(errorMessage);
+      } else {
+        this.toastr.error('Une erreur est survenue ! Contact moi Hikudo#1714');
       }
-
-      this.toastr.error('Une erreur est survenue ! Contact moi Hikudo#1714');
     }
   }
 
-  getUsername() {
-    let decoded = this.jwtHelper.decodeToken(this.getToken());
-    return decoded.username;
+  async refreshToken() {
+    try {
+      let { data } = await axios.post(`${environment.apiUrl}/auth/refresh-token`, { token: this.getToken() });
+      const { token } = data;
+
+      this.token = token;
+      localStorage.setItem('token', token);
+    } catch (e: any) {
+      console.error('Failed to refresh token:', e);
+      this.logout();
+    }
+  }
+
+  getUsername(): string {
+    const token = this.getToken();
+
+    if (!token) {
+      return "";
+    }
+
+    try {
+      const decodedToken = this.jwtHelper.decodeToken(token);
+
+      if (decodedToken && decodedToken.username) {
+        return decodedToken.username;
+      }
+    } catch (error) {
+      console.error('Failed to decode token:', error);
+    }
+
+    return "";
   }
 }
