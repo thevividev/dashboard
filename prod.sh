@@ -1,7 +1,7 @@
 #!/bin/bash
 
 if [ -d "dist" ]; then
-  rm -rf dist
+  sudo rm -rf dist
 fi
 
 npm install
